@@ -1,5 +1,46 @@
-::root {
-  --bg-color : #fff;
-  --txt-color1 : #000;
-  --txt-color2 : #ccc;
+
+:root {
+  /* Couleurs */
+  --bleu : #1f6aa5;
+  --blanc:       #ffffff;
+  --gris-clair:  #f0ede8;
+  --gris-bord:   #e2ddd6;
+  --gris-texte:  #888077;
+  --noir:        #111009;
+
+
+  /* Typographie */
+  --serif:  'Helvetica', sans-serif;
+  --sans:   'Inter', system-ui, sans-serif;
+
+  /* Tailles */
+  --t-sm:   0.875rem;
+  --t-base: 1rem;
+  --t-lg:   1.125rem;
+  --t-xl:   1.375rem;
+  --t-2xl:  1.75rem;
+  --t-3xl:  2.5rem;
+  --t-hero: clamp(3rem, 6vw, 5.5rem);
+
+  /* Espacement */
+  --esp-1: 0.25rem;
+  --esp-2: 0.5rem;
+  --esp-3: 0.75rem;
+  --esp-4: 1rem;
+  --esp-6: 1.5rem;
+  --esp-8: 2rem;
+  --esp-12: 3rem;
+  --esp-16: 4rem;
+  --esp-24: 6rem;
+  --esp-32: 8rem;
+
+  /* Rayon */
+  --r-sm:   6px;
+  --r-md:   12px;
+  --r-lg:   20px;
+  --r-full: 9999px;
+
+  /* Transitions */
+  --vite:  200ms ease;
+  --moyen: 350ms ease;
 }
