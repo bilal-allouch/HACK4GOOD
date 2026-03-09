@@ -3,231 +3,414 @@
 
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Estimation de l’impact énergétique des prompts IA</title>
+    <title>Analyse énergétique des prompts IA</title>
 
-<link rel="stylesheet" href="css/variables.css">
-<link rel="stylesheet" href="css/layout.css">
-<link rel="stylesheet" href="css/index.css">
-<link rel="stylesheet" href="css/analyse.css">
+    <link rel="stylesheet" href="css/style.css">
 
 </head>
 
 <body>
 
-<nav>
-<a href="index.html" class="logo">EcoPrompt</a>
-</nav>
 
-<div class="page">
+    <!-- NAVBAR -->
 
-<header class="header">
+    <nav>
+        <a href="index.html" class="logo">EcoPrompt</a>
+    </nav>
 
-<h1 class="title">
-Estimation de l’impact énergétique des prompts IA
-</h1>
 
-<p class="subtitle">
-Écrivez un prompt et découvrez son impact écologique selon le modèle d’IA et le pays utilisé.
-</p>
 
-</header>
+    <!-- PAGE -->
 
-<section class="card form-section">
+    <div class="page">
 
-<label class="label">Votre prompt</label>
+        <header class="header">
 
-<textarea
-id="promptInput"
-class="prompt-input"
-placeholder="Écrivez votre prompt ici...">
+            <h1 class="title">
+                Estimation de l’impact énergétique des prompts IA
+            </h1>
+
+            <p class="subtitle">
+                Écrivez un prompt et découvrez son impact écologique selon le modèle d’IA et le pays utilisé.
+            </p>
+
+        </header>
+
+
+
+        <!-- FORMULAIRE -->
+
+        <section class="card form-section">
+
+            <label class="label">
+                Votre prompt
+            </label>
+
+            <textarea id="promptInput" class="prompt-input" placeholder="Écrivez votre prompt ici...">
 </textarea>
 
-<div class="controls">
 
-<div class="control">
 
-<label class="label">Modèle IA</label>
+            <div class="controls">
 
-<select id="modelSelect" class="select">
 
-<option value="gpt-4o-mini" selected>GPT-4o mini</option>
-<option value="gpt-4o">GPT-4o</option>
-<option value="gpt-3.5">GPT-3.5</option>
-<option value="llama3-8b">Llama 3 (8B)</option>
-<option value="llama3-70b">Llama 3 (70B)</option>
-<option value="mistral-7b">Mistral (7B)</option>
+                <div class="control">
 
-</select>
+                    <label class="label">
+                        Modèle IA
+                    </label>
 
-<p class="hint">
-L’estimation dépend du modèle choisi.
-</p>
+                    <select id="modelSelect" class="select">
 
-</div>
+                        <option value="gpt-4o-mini" selected>
+                            GPT-4o mini
+                        </option>
 
-<div class="control">
+                        <option value="gpt-4o">
+                            GPT-4o
+                        </option>
 
-<label class="label">Pays</label>
+                        <option value="gpt-3.5">
+                            GPT-3.5
+                        </option>
 
-<select id="countrySelect" class="select">
+                        <option value="llama3-8b">
+                            Llama 3 (8B)
+                        </option>
 
-<option value="FR" selected>France</option>
-<option value="DE">Allemagne</option>
-<option value="ES">Espagne</option>
+                        <option value="llama3-70b">
+                            Llama 3 (70B)
+                        </option>
 
-</select>
+                        <option value="mistral-7b">
+                            Mistral (7B)
+                        </option>
 
-<p class="hint">
-Le CO₂ dépend de l’intensité carbone du pays.
-</p>
+                    </select>
 
-</div>
+                    <p class="hint">
+                        L’estimation dépend du modèle choisi.
+                    </p>
 
-<div class="control">
+                </div>
 
-<label class="label">Intensité carbone</label>
 
-<div class="pill">
 
-<span id="ciValue">-</span>
-<span class="pill-unit">gCO₂/kWh</span>
+                <div class="control">
 
-</div>
+                    <label class="label">
+                        Pays
+                    </label>
 
-<p class="hint">
-Valeur estimée selon le pays choisi.
-</p>
+                    <select id="countrySelect" class="select">
 
-</div>
+                        <option value="FR" selected>
+                            France
+                        </option>
 
-</div>
+                        <option value="DE">
+                            Allemagne
+                        </option>
 
-<button id="analyzeBtn" class="analyze-button">
-Analyser mon prompt
-</button>
+                        <option value="ES">
+                            Espagne
+                        </option>
 
-</section>
+                    </select>
 
-<section class="card results-section">
+                    <p class="hint">
+                        Le CO₂ dépend de l’intensité carbone du pays.
+                    </p>
 
-<h2 class="section-title">
-Résultats du prompt
-</h2>
+                </div>
 
-<div class="result-box">
 
-<div class="result-item">
-<span class="result-label">Tokens estimés :</span>
-<span class="result-value" id="tokensIn">-</span>
-</div>
 
-<div class="result-item">
-<span class="result-label">Énergie estimée :</span>
-<span class="result-value" id="energy">-</span>
-</div>
+                <div class="control">
 
-<div class="result-item">
-<span class="result-label">CO₂ estimé :</span>
-<span class="result-value" id="co2">-</span>
-</div>
+                    <label class="label">
+                        Intensité carbone
+                    </label>
 
-<div class="result-item">
-<span class="result-label">Score écologique :</span>
-<span class="result-value" id="score">-</span>
-</div>
+                    <div class="pill">
 
-</div>
+                        <span id="ciValue">-</span>
 
-</section>
+                        <span class="pill-unit">
+                            gCO₂/kWh
+                        </span>
 
-<section class="card comparison-section">
+                    </div>
 
-<h2 class="section-title">
-Comparaison avec la vie réelle
-</h2>
+                    <p class="hint">
+                        Valeur estimée selon le pays choisi.
+                    </p>
 
-<p class="usage-text">
-Voici quelques équivalences pour mieux comprendre l’impact de votre prompt.
-</p>
+                </div>
 
-<div class="comparison-box">
 
-<div class="comparison-item">
-<span>Recharge smartphone</span>
-<span id="phone">-</span>
-</div>
+            </div>
 
-<div class="comparison-item">
-<span>Ampoule LED</span>
-<span id="bulb">-</span>
-</div>
 
-<div class="comparison-item">
-<span>Ordinateur portable</span>
-<span id="laptop">-</span>
-</div>
 
-<div class="comparison-item">
-<span>Distance voiture</span>
-<span id="car">-</span>
-</div>
+            <button id="analyzeBtn" class="analyze-button">
 
-<div class="comparison-item">
-<span>Emails envoyés</span>
-<span id="email">-</span>
-</div>
+                Analyser mon prompt
 
-<div class="comparison-item">
-<span>Absorption par un arbre</span>
-<span id="tree">-</span>
-</div>
+            </button>
 
-</div>
+        </section>
 
-</section>
 
-</div>
 
-<footer>
 
-<div class="conteneur">
+        <!-- RESULTATS -->
 
-<div class="pied-interieur">
+        <section class="card results-section">
 
-<div>
+            <h2 class="section-title">
+                Résultats du prompt
+            </h2>
 
-<a href="index.html" class="logo">EcoPrompt</a>
 
-<p class="copyright">
-© 2025 EcoPrompt — Tous droits réservés.
-</p>
+            <div class="result-box">
 
-</div>
 
-<ul class="pied-liens">
+                <div class="result-item">
 
-<li>
-<a href="https://github.com/Neipee/adaptation-dynamique-de-mod-le-d-ia" target="_blank">
-Télécharger l'Outil
-</a>
-</li>
+                    <span class="result-label">
+                        Tokens estimés :
+                    </span>
 
-<li>
-<a href="analyse.html">Analyse</a>
-</li>
+                    <span class="result-value" id="tokensIn">
 
-</ul>
+                        -
 
-</div>
+                    </span>
 
-</div>
+                </div>
 
-</footer>
 
-<script src="app.js"></script>
+
+                <div class="result-item">
+
+                    <span class="result-label">
+                        Énergie estimée :
+                    </span>
+
+                    <span class="result-value" id="energy">
+
+                        -
+
+                    </span>
+
+                </div>
+
+
+
+                <div class="result-item">
+
+                    <span class="result-label">
+                        CO₂ estimé :
+                    </span>
+
+                    <span class="result-value" id="co2">
+
+                        -
+
+                    </span>
+
+                </div>
+
+
+
+                <div class="result-item">
+
+                    <span class="result-label">
+                        Score écologique :
+                    </span>
+
+                    <span class="result-value" id="score">
+
+                        -
+
+                    </span>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+
+
+        <!-- COMPARAISONS -->
+
+        <section class="card comparison-section">
+
+            <h2 class="section-title">
+                Comparaison avec la vie réelle
+            </h2>
+
+
+            <p class="usage-text">
+                Voici quelques équivalences pour mieux comprendre l’impact écologique de votre prompt.
+            </p>
+
+
+            <div class="comparison-box">
+
+
+                <div class="comparison-item">
+
+                    <span>
+                        Recharge smartphone
+                    </span>
+
+                    <span id="phone">
+                        -
+                    </span>
+
+                </div>
+
+
+
+                <div class="comparison-item">
+
+                    <span>
+                        Ampoule LED
+                    </span>
+
+                    <span id="bulb">
+                        -
+                    </span>
+
+                </div>
+
+
+
+                <div class="comparison-item">
+
+                    <span>
+                        Ordinateur portable
+                    </span>
+
+                    <span id="laptop">
+                        -
+                    </span>
+
+                </div>
+
+
+
+                <div class="comparison-item">
+
+                    <span>
+                        Distance voiture
+                    </span>
+
+                    <span id="car">
+                        -
+                    </span>
+
+                </div>
+
+
+
+                <div class="comparison-item">
+
+                    <span>
+                        Emails envoyés
+                    </span>
+
+                    <span id="email">
+                        -
+                    </span>
+
+                </div>
+
+
+
+                <div class="comparison-item">
+
+                    <span>
+                        Absorption par un arbre
+                    </span>
+
+                    <span id="tree">
+                        -
+                    </span>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+    </div>
+
+
+
+
+    <!-- FOOTER -->
+
+    <footer>
+
+        <div class="conteneur">
+
+            <div class="pied-interieur">
+
+                <div>
+
+                    <a href="index.html" class="logo">
+                        EcoPrompt
+                    </a>
+
+                    <p class="copyright">
+                        © 2025 EcoPrompt — Tous droits réservés.
+                    </p>
+
+                </div>
+
+
+                <ul class="pied-liens">
+
+                    <li>
+
+                        <a href="https://github.com/Neipee/adaptation-dynamique-de-mod-le-d-ia" target="_blank">
+
+                            Télécharger l'Outil
+
+                        </a>
+
+                    </li>
+
+
+                    <li>
+                        <a href="analyse.html">
+                            Analyse
+                        </a>
+                    </li>
+
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </footer>
+
+
+
+    <script src="app.js"></script>
 
 </body>
+
 </html>

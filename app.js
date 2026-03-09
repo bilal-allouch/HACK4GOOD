@@ -32,12 +32,16 @@ const EMAIL_CO2_G = 0.3;
 
 function estimateTokens(text) {
   const cleanText = (text || "").trim();
-  if (cleanText.length === 0) return 0;
+
+  if (cleanText.length === 0) {
+    return 0;
+  }
+
   return Math.ceil(cleanText.length / 4);
 }
 
-function joulesToKwh(j) {
-  return j / 3600000;
+function joulesToKwh(joules) {
+  return joules / 3600000;
 }
 
 function kwhToWh(kwh) {
@@ -47,12 +51,13 @@ function kwhToWh(kwh) {
 function computeEnergy(tokens, model) {
   const jPerToken = J_PER_TOKEN[model] || 0;
   const energyJ = tokens * jPerToken;
+
   return joulesToKwh(energyJ);
 }
 
 function computeCo2(kwh, country) {
-  const ci = CARBON_INTENSITY[country] || 0;
-  return kwh * ci;
+  const carbonIntensity = CARBON_INTENSITY[country] || 0;
+  return kwh * carbonIntensity;
 }
 
 function computeEcoScore(energyWh) {
@@ -65,19 +70,13 @@ function computeEcoScore(energyWh) {
 ========================= */
 
 function computeRealLifeComparisons(energyKwh, co2g) {
-
-  const energyWh = energyKwh * 1000;
+  const energyWh = kwhToWh(energyKwh);
 
   const smartphonePercent = (energyWh / SMARTPHONE_BATTERY_WH) * 100;
-
   const ledSeconds = (energyWh / LED_POWER_W) * 3600;
-
   const laptopSeconds = (energyWh / LAPTOP_POWER_W) * 3600;
-
   const carKm = co2g / CAR_CO2_G_PER_KM;
-
   const emails = co2g / EMAIL_CO2_G;
-
   const treeYears = co2g / TREE_CO2_G_PER_YEAR;
 
   return {
@@ -86,7 +85,7 @@ function computeRealLifeComparisons(energyKwh, co2g) {
     laptopSeconds,
     carKm,
     emails,
-    treeYears
+    treeYears,
   };
 }
 
@@ -95,27 +94,32 @@ function computeRealLifeComparisons(energyKwh, co2g) {
 ========================= */
 
 function formatEnergy(kwh) {
-
   const wh = kwhToWh(kwh);
 
-  if (wh < 1) return `${wh.toFixed(4)} Wh`;
+  if (wh < 1) {
+    return `${wh.toFixed(4)} Wh`;
+  }
 
-  if (kwh < 1) return `${wh.toFixed(2)} Wh`;
+  if (kwh < 1) {
+    return `${wh.toFixed(2)} Wh`;
+  }
 
   return `${kwh.toFixed(4)} kWh`;
 }
 
-function formatCo2(g) {
+function formatCo2(grams) {
+  if (grams < 1) {
+    return `${grams.toFixed(4)} gCO₂`;
+  }
 
-  if (g < 1) return `${g.toFixed(4)} gCO₂`;
+  if (grams < 1000) {
+    return `${grams.toFixed(2)} gCO₂`;
+  }
 
-  if (g < 1000) return `${g.toFixed(2)} gCO₂`;
-
-  return `${(g / 1000).toFixed(3)} kgCO₂`;
+  return `${(grams / 1000).toFixed(3)} kgCO₂`;
 }
 
 function formatSeconds(seconds) {
-
   if (seconds < 60) {
     return `${seconds.toFixed(1)} secondes`;
   }
@@ -127,15 +131,17 @@ function formatSeconds(seconds) {
   }
 
   const hours = minutes / 60;
-
   return `${hours.toFixed(2)} heures`;
 }
 
 function formatCount(value) {
+  if (value < 1) {
+    return value.toFixed(2);
+  }
 
-  if (value < 1) return value.toFixed(2);
-
-  if (value < 10) return value.toFixed(1);
+  if (value < 10) {
+    return value.toFixed(1);
+  }
 
   return value.toFixed(0);
 }
@@ -145,14 +151,18 @@ function formatCount(value) {
 ========================= */
 
 function updateCarbonPill() {
+  const countrySelect = $("countrySelect");
+  const ciValue = $("ciValue");
 
-  const country = $("countrySelect").value;
+  if (!countrySelect || !ciValue) {
+    return;
+  }
 
-  $("ciValue").textContent = CARBON_INTENSITY[country];
+  const country = countrySelect.value;
+  ciValue.textContent = CARBON_INTENSITY[country] ?? "-";
 }
 
 function resetResults() {
-
   $("tokensIn").textContent = "-";
   $("energy").textContent = "-";
   $("co2").textContent = "-";
@@ -171,7 +181,6 @@ function resetResults() {
 ========================= */
 
 function analyzePrompt() {
-
   const prompt = $("promptInput").value;
   const model = $("modelSelect").value;
   const country = $("countrySelect").value;
@@ -204,14 +213,38 @@ function analyzePrompt() {
 }
 
 /* =========================
-   Events
+   Initialisation
 ========================= */
 
 document.addEventListener("DOMContentLoaded", () => {
+  const countrySelect = $("countrySelect");
+  const analyzeBtn = $("analyzeBtn");
+  const promptInput = $("promptInput");
+  const modelSelect = $("modelSelect");
 
   updateCarbonPill();
   resetResults();
 
-  $("countrySelect").addEventListener("change", updateCarbonPill);
-  $("analyzeBtn").addEventListener("click", analyzePrompt);
+  if (countrySelect) {
+    countrySelect.addEventListener("change", () => {
+      updateCarbonPill();
+      analyzePrompt();
+    });
+  }
+
+  if (modelSelect) {
+    modelSelect.addEventListener("change", analyzePrompt);
+  }
+
+  if (analyzeBtn) {
+    analyzeBtn.addEventListener("click", analyzePrompt);
+  }
+
+  if (promptInput) {
+    promptInput.addEventListener("input", () => {
+      if (promptInput.value.trim() === "") {
+        resetResults();
+      }
+    });
+  }
 });
